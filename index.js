@@ -4,7 +4,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb)=>{
-        cb(null, 'public/image/')
+        cb(null, 'public/images/')
     },
     filename: (req, file, cb)=>{
         cb(null, Date.now() + '-' + file.originalname)
@@ -16,10 +16,11 @@ const single = upload.single('avatar')
 app.get('/upload', (req,res)=>{
     res.render('upload');
 })
-app.post('/upload', single, (req,res)=>{
-    const avatar = req.file;
-    const name = req.body.txtName
-    res.send({ avatar, name })
+app.post('/upload', (req,res)=>{
+    single(req, res, (err)=>{
+        if(err) return res.send({ error: err.message })
+        return res.send({ avatar: req.file });
+    })
 })
 
 app.listen(3000,()=>console.log('Server start on port 3000'));
