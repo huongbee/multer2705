@@ -10,12 +10,22 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
+
+function fileFilter(req, file, cb){
+    if(file.mimetype != 'image/gif' && file.mimetype != 'image/jpeg' && file.mimetype != 'image/png'){
+        //return cb(null, false);
+        return cb(new Error('File not allow!'))
+    }
+    cb(null, true);
+}
+
 const upload = multer({
     storage,
     limits: {
         fileSize: 102400,
         fieldSize: 204800
-    } // 100kB
+    }, // 100kB
+    fileFilter
 })
 const single = upload.single('avatar')
 
