@@ -10,7 +10,13 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
-const upload = multer({ storage })
+const upload = multer({
+    storage,
+    limits: {
+        fileSize: 102400,
+        fieldSize: 204800
+    } // 100kB
+})
 const single = upload.single('avatar')
 
 app.get('/upload', (req,res)=>{
