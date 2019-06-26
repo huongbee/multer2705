@@ -39,11 +39,24 @@ app.get('/upload', (req,res)=>{
 //     })
 // })
 
-const array = upload.array('avatar', 2)
+// const array = upload.array('avatar', 2)
+// app.post('/upload', (req,res)=>{
+//     array(req, res, (err)=>{
+//         if(err) return res.send({ error: err.message })
+//         return res.send({ avatar: req.files });
+//     })
+// })
+
+const fields = upload.fields([
+    { name: 'hinhChinh' },
+    { name: 'hinhPhu', 'maxCount': 2 }
+]);
 app.post('/upload', (req,res)=>{
-    array(req, res, (err)=>{
+    fields(req, res, (err)=>{
         if(err) return res.send({ error: err.message })
-        return res.send({ avatar: req.files });
+        const mainImg = req.files.hinhChinh[0]
+        const subImgs = req.files.hinhPhu
+        return res.send({ mainImg, subImgs })
     })
 })
 
