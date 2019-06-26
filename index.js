@@ -22,20 +22,28 @@ function fileFilter(req, file, cb){
 const upload = multer({
     storage,
     limits: {
-        fileSize: 102400,
-        fieldSize: 204800
+        fileSize: 102400, //100kb
+        fieldSize: 204800  //200kb
     }, // 100kB
     fileFilter
 })
-const single = upload.single('avatar')
+// const single = upload.single('avatar')
 
 app.get('/upload', (req,res)=>{
     res.render('upload');
 })
+// app.post('/upload', (req,res)=>{
+//     single(req, res, (err)=>{
+//         if(err) return res.send({ error: err.message })
+//         return res.send({ avatar: req.file });
+//     })
+// })
+
+const array = upload.array('avatar', 2)
 app.post('/upload', (req,res)=>{
-    single(req, res, (err)=>{
+    array(req, res, (err)=>{
         if(err) return res.send({ error: err.message })
-        return res.send({ avatar: req.file });
+        return res.send({ avatar: req.files });
     })
 })
 
